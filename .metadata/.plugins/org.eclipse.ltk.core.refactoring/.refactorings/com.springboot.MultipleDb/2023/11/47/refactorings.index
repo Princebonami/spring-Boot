@@ -1,0 +1,30 @@
+1700462348702	Rename package 'com.springboot.crud2.mysql1.config'
+1700462381381	Rename package 'com.springboot.crud2.mysql1.entities'
+1700462408089	Rename package 'com.springboot.crud2.mysql1.repo'
+1700462423705	Rename package 'com.springboot.crud2.mysql2.config'
+1700462444158	Rename package 'com.springboot.crud2.mysql2.entities'
+1700462758311	Rename package 'com.springboot.crud2.mysql2.repo'
+1700462818349	Rename type 'MySqlDb2Config'
+1700462830338	Rename type 'MySqlDb1Config'
+1700465853653	Move compilation unit
+1700465862254	Move compilation unit
+1700465871783	Move compilation unit
+1700465893486	Delete element
+1700465899307	Delete element
+1700465903807	Delete element
+1700467198433	Move compilation unit
+1700472091698	Copy package
+1700472098541	Delete element
+1700472112620	Copy compilation unit
+1700472118012	Delete element
+1700472196770	Copy compilation unit
+1700472202016	Delete element
+1700492506577	Rename package 'com.springboot.crud2.entities1'
+1700492522931	Rename package 'com.springboot.crud2.entities2'
+1700492586891	Rename package 'com.springboot.crud2.repository1'
+1700492603201	Rename package 'com.springboot.crud2.repository2'
+1700493118606	Rename type 'Db1Config'
+1700493612703	Copy compilation unit
+1700493619524	Delete element
+1700493636130	Rename package 'com.springboot.crud2.config1'
+1700493671989	Rename type 'Db2Config'

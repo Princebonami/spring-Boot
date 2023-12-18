@@ -1,0 +1,62 @@
+package com.springboot.crud1.Service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
+import com.springboot.crud1.Entity.Student;
+import com.springboot.crud1.Exception.NoSuchElementFoundEXception;
+import com.springboot.crud1.Exception.NoSuchStudentNameFoundException;
+import com.springboot.crud1.Repository.StudentRepository;
+
+@Component
+public class StudentService {
+	
+	@Autowired
+	private StudentRepository studentRepository;
+
+	public List<Student> getAllStudent()
+	{
+		List<Student> list= (List<Student>) studentRepository.findAll();
+		return list;
+	}
+	
+	public Student getStudentById(int studentId)
+	{
+		if(studentRepository.findById(studentId).isEmpty())
+		{
+			throw new NoSuchElementFoundEXception();
+		}
+		return studentRepository.findById(studentId).get();
+	} 
+	public List<Student> getByName(String studentName)
+	{
+		List<Student> list= studentRepository.findBystudentName(studentName);
+		if(list.isEmpty())
+		{
+			throw new NoSuchStudentNameFoundException();
+		}
+		return list;
+	}
+	public String addStudent(Student student)
+	{
+		studentRepository.save(student);
+		return "Data added Successfully";
+	}
+	public String updateStudent(Student student,int studentId)
+	{
+		
+		student.setStudentId(studentId);
+		studentRepository.save(student);
+		return "Updated Sucessfully";
+	}
+	public String deleteById(int studentId)
+	{
+		studentRepository.deleteById(studentId);
+		return "Deleted Successfully";
+	}
+	
+}

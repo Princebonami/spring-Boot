@@ -1,0 +1,168 @@
+package com.thinkconstructive.restdemo.controller;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import java.util.Arrays;
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatcher;
+import org.mockito.ArgumentMatchers;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.thinkconstructive.restdemo.model.CloudVendor;
+import com.thinkconstructive.restdemo.service.CloudService;
+
+@WebMvcTest(value = CloudController.class)
+public class CloudControllerTest {
+	
+	@MockBean          // it is used to create mock bean  mocking means creating dummy object
+	private CloudService cloudService;
+	
+	@Autowired
+	private MockMvc mockMvc;  // it is used to send the request
+	
+	// 1. correct
+	// 2. incorrect 
+	// 3. exception
+	
+	@Test
+	public void testGetCloudVendorDetails() throws Exception
+	{
+//		CloudVendor cloudVendor=new CloudVendor(1,"Manoj","Barauni",6299925351l);
+		List<CloudVendor> list=new ArrayList<CloudVendor>();
+		when(cloudService.getCloudVendorDetails()).thenReturn(list);
+		Integer result= mockMvc.perform(MockMvcRequestBuilders.get("/cloudvendors")).andExpect(status().isOk()).andReturn().getResponse().getStatus();
+		
+		assertEquals(200, result);
+//		MockHttpServletRequestBuilder requestBuilder =MockMvcRequestBuilders.get("/cloudvendors");  // here request gets created
+		
+//		ResultActions resultActions= mockMvc.perform(requestBuilder);
+//		MvcResult mvcResult=  resultActions.andReturn();
+//		MockHttpServletResponse response=mvcResult.getResponse();
+//		assertEquals(4096, response.getBufferSize());
+//		assertEquals(200, response.getStatus());	
+		
+//		mockMvc.perform(MockMvcRequestBuilders.get("/cloudvendors"))
+//        .andExpect(
+//            result -> {
+//                MockHttpServletResponse response = result.getResponse();
+//               // assertEquals(4096, response.getBufferSize());
+//                assertEquals(200, response.getStatus());
+//                // Add more assertions if needed
+//            }
+//        );
+
+	}
+	
+	@Test
+	public void testGetCloudVendorById() throws Exception
+	{
+		Integer vendorId=1;
+		
+		CloudVendor cloudVendor=new CloudVendor(vendorId,"Manoj","Barauni",6299925351l); 
+	   	  when(cloudService.getCloudVendorById(vendorId)).thenReturn(cloudVendor);
+	   	 MvcResult mvcResult= mockMvc.perform(MockMvcRequestBuilders.get("/cloudvendors/{vendorId}",vendorId)).andExpect(status().isOk()).andReturn();
+	   	 String response=mvcResult.getResponse().getContentAsString();
+	   	 
+	   	 ObjectMapper objectMapper=new ObjectMapper();
+	   	 CloudVendor actuVendor=objectMapper.readValue(response,CloudVendor.class);
+	   	 
+	   	 assertEquals(cloudVendor.getVendorId(),actuVendor.getVendorId());
+	   	assertEquals(cloudVendor.getVendorName(),actuVendor.getVendorName());
+	   	assertEquals(cloudVendor.getVendorAddress(),actuVendor.getVendorAddress());
+	   	assertEquals(cloudVendor.getVendorPhoneNmber(),actuVendor.getVendorPhoneNmber());
+		
+	}
+	
+	@Test
+	public void testGetVendorByName() throws Exception
+	{
+		String vendorName="Prince";
+		List<CloudVendor> list=Arrays.asList(
+				new CloudVendor(2,vendorName,"Barauni",9123424817l),
+				new CloudVendor(3,vendorName,"Patna",8289019584l)
+				);
+				
+		when(cloudService.getVendorByName(vendorName)).thenReturn(list);
+		MvcResult mvcResult= mockMvc.perform(MockMvcRequestBuilders.get("/cloudVendors/{name}",vendorName)).andExpect(status().isOk()).andReturn();
+		String conString= mvcResult.getResponse().getContentAsString();
+		
+		ObjectMapper objectMapper=new ObjectMapper();
+		List<CloudVendor> list2 =objectMapper.readValue(conString, new TypeReference<List<CloudVendor>>() {});
+		
+		assertEquals(list.size(), list2.size());
+		
+		for(int i=0;i<list.size();i++)
+		{
+			CloudVendor cloudVendor1=list.get(i);
+			CloudVendor cloudVendor2=list2.get(i);
+			
+			assertEquals(cloudVendor1.getVendorId(),cloudVendor2.getVendorId());
+			assertEquals(cloudVendor1.getVendorName(),cloudVendor2.getVendorName());
+			assertEquals(cloudVendor1.getVendorAddress(),cloudVendor2.getVendorAddress());
+			assertEquals(cloudVendor1.getVendorPhoneNmber(),cloudVendor2.getVendorPhoneNmber());
+		}
+			
+	}
+	
+	@Test
+	public void testAddCloudVendor() throws Exception
+	{
+		when(cloudService.addCloudVendor(ArgumentMatchers.any())).thenReturn("true");
+		
+		CloudVendor cloudVendor=new CloudVendor(5,"Akanksha","Bangaluru",1234567891l);
+		ObjectMapper objectMapper=new ObjectMapper();
+		String jsonCloudVendor=   objectMapper.writeValueAsString(cloudVendor);
+		
+	    MvcResult mvcResult= mockMvc.perform(MockMvcRequestBuilders.post("/cloudvendors")
+		                       .contentType(MediaType.APPLICATION_JSON)
+		                       .content(jsonCloudVendor)).andExpect(status().isOk()).andReturn();
+	    
+	    Integer status=  mvcResult.getResponse().getStatus();
+	    assertEquals(200,status);
+		  
+		
+	}
+	
+	@Test
+	public void testUpdateById() throws Exception
+	{
+		Integer vendorId=1;
+		CloudVendor cloudVendor=new CloudVendor(vendorId,"Akanksha","Bangaluru",1234567891l);
+		when(cloudService.updateById(cloudVendor,vendorId)).thenReturn("true");
+		
+		ObjectMapper objectMapper=new ObjectMapper();
+		String jsonCloudVendor=   objectMapper.writeValueAsString(cloudVendor);
+		
+	    MvcResult mvcResult=mockMvc.perform(MockMvcRequestBuilders.put("/cloudvendors/{vendorId}",vendorId).contentType(MediaType.APPLICATION_JSON).content(jsonCloudVendor)).andExpect(status().isOk()).andReturn();
+	    String con=  mvcResult.getResponse().getContentAsString();
+	    
+	    CloudVendor cloudVendor2=  objectMapper.readValue(con,CloudVendor.class);
+	    
+	    assertEquals(cloudVendor.getVendorId(),cloudVendor2.getVendorId());
+	    
+	}
+		
+		
+		
+		
+		
+	
+	
+	
+
+}

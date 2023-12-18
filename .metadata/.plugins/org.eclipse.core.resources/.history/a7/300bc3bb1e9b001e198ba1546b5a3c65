@@ -1,0 +1,7 @@
+package com.springboot.crud1.controller;
+
+
+@WebMvc  
+public class TestStudentController {
+
+}

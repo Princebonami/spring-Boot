@@ -1,0 +1,5 @@
+package com.springboot.JunitTesting.Entity;
+
+public class Person {
+
+}

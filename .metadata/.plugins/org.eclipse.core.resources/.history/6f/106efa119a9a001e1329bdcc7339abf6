@@ -1,0 +1,39 @@
+package com.thinkconstructive.restdemo.service;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import com.thinkconstructive.restdemo.model.CloudVendor;
+import com.thinkconstructive.restdemo.repository.CloudRepository;
+
+@WebMvcTest(value = CloudService.class)
+public class CloudServiceTest {
+ 
+	@MockBean
+	private CloudRepository cloudRepository;
+	
+	@Autowired
+	private CloudService cloudService;
+	
+	
+	public void testGetCLoudVendorDetails()
+	{
+		List<CloudVendor> list=new ArrayList<CloudVendor>();
+		when(cloudRepository.findAll()).thenReturn(list);
+		
+		assertEquals(List<CloudVendor> , null);
+		
+		
+	}
+	
+	
+}

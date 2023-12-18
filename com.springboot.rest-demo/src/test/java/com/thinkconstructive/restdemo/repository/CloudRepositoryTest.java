@@ -1,0 +1,96 @@
+package com.thinkconstructive.restdemo.repository;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.List;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import com.thinkconstructive.restdemo.model.CloudVendor;
+
+/**
+ * 
+ */
+@DataJpaTest
+public class CloudRepositoryTest {
+	
+	
+	@Autowired
+	private CloudRepository cloudRepository;
+	
+	CloudVendor cloudVendor;
+	
+	@BeforeEach
+	void setup()
+	{
+		cloudVendor =new CloudVendor(1,"Prince","Bihar",9123424817l);
+		cloudRepository.save(cloudVendor);
+		
+	}
+	
+	@AfterEach
+	void tearDown()
+	{
+		cloudVendor=null;
+		cloudRepository.deleteAll();
+	}
+	
+	// Test case Success
+	@Test
+	void testFindBYVendorName_Found()
+	{
+	   List<CloudVendor>  cloudVendorList=cloudRepository.findByVendorName("Prince");
+	   assertThat(cloudVendorList.get(0).getVendorId()).isEqualTo(cloudVendor.getVendorId());
+	   assertThat(cloudVendorList.get(0).getVendorAddress()).isEqualTo(cloudVendor.getVendorAddress());
+	}
+	
+	@Test
+	void testFIndByVendorName_NotFound()
+	{
+		  List<CloudVendor>  cloudVendorList=cloudRepository.findByVendorName("Nibha");
+		   assertThat(cloudVendorList.isEmpty()).isTrue();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+}

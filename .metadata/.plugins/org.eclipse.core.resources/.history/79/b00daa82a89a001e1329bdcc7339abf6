@@ -1,0 +1,96 @@
+package com.thinkconstructive.restdemo.service;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
+
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+
+import com.thinkconstructive.restdemo.exception.CloudVendorNotFoundException;
+import com.thinkconstructive.restdemo.model.CloudVendor;
+import com.thinkconstructive.restdemo.repository.CloudRepository;
+
+@WebMvcTest(value = CloudService.class)
+public class CloudServiceTest {
+ 
+	@MockBean
+	private CloudRepository cloudRepository;
+	
+	@Autowired
+	private CloudService cloudService;
+	
+	@Test
+	public void testGetCLoudVendorDetails()
+	{
+		List<CloudVendor> list=Arrays.asList(
+		     new CloudVendor(1,"Manoj","Barauni",6299925351l),
+		     new CloudVendor(3,"Prince","Patna",8289019584l));
+				
+				
+		when(cloudRepository.findAll()).thenReturn(list);
+		
+		List<CloudVendor> list1 =cloudService.getCloudVendorDetails();
+		
+		for(CloudVendor cloudVendor : list)
+		{
+			assertTrue(list1.contains(cloudVendor));
+		}	
+		
+	}
+	
+	@Test
+	public void testGetCloudVenderById()
+	{
+		Integer vendorId=1;
+		CloudVendor cloudVendor=new CloudVendor(vendorId,"Manoj","Barauni",6299925351l);
+		when(cloudRepository.findById(vendorId)).thenReturn(java.util.Optional.of(cloudVendor));
+		
+		CloudVendor cloudVendor2=cloudService.getCloudVendorById(vendorId);
+		assertEquals(cloudVendor.getVendorId(), cloudVendor2.getVendorId());
+		assertEquals(cloudVendor.getVendorName(), cloudVendor2.getVendorName());
+		assertEquals(cloudVendor.getVendorAddress(), cloudVendor2.getVendorAddress());
+		assertEquals(cloudVendor.getVendorPhoneNmber(), cloudVendor2.getVendorPhoneNmber());
+		
+	}
+	
+	@Test
+	public void testGetCloudVendorById_InvalidId() {
+        int vendorId = 100; 
+       
+        when(cloudRepository.findById(vendorId)).thenReturn(java.util.Optional.empty());
+
+        assertThrows(CloudVendorNotFoundException.class, () -> cloudService.getCloudVendorById(vendorId));
+
+        
+    }
+	
+	@Test
+	public void getVendorByName()
+	{
+		String name="Prince";
+		
+		List<CloudVendor> list=Arrays.asList( 
+				new CloudVendor(2,name,"Barauni",9123424817l),
+				new CloudVendor(3,name,"Patna",8289019584l)
+				);
+		
+		when(cloudRepository.findByVendorName(name)).thenReturn(list);
+		
+		List<CloudVendor> list2=cloudService.getVendorByName(name);
+		
+		list.forEach(li->{
+			list2.contains(li);
+		});
+	}
+	
+//	public void
+	
+	
+}

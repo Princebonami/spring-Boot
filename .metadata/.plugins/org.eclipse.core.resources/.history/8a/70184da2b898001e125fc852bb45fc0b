@@ -1,0 +1,18 @@
+package com.thinkconstructive.restdemo.repository;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import com.thinkconstructive.restdemo.model.CloudVendor;
+
+@DataJpaTest
+public class CloudRepositoryTest {
+	
+	@Autowired
+	private CloudRepository cloudRepository;
+	
+	CloudVendor cloudVendor;
+	
+	
+
+}

@@ -1,0 +1,15 @@
+package com.thinkconstructive.restdemo.repository;
+
+import java.util.List;
+
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
+import com.thinkconstructive.restdemo.model.CloudVendor;
+
+
+@Repository
+public interface CloudRepository extends CrudRepository<CloudVendor, Integer>{
+	
+      public List<CloudVendor> findByVendorName(String vendorName); 
+}

@@ -1,0 +1,26 @@
+package com.thinkconstructive.restdemo.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.MockMvc;
+
+import com.thinkconstructive.restdemo.repository.CloudRepository;
+
+@WebMvcTest(value = CloudService.class)
+public class CloudServiceTest {
+ 
+	@MockBean
+	private CloudRepository cloudRepository;
+	
+	@Autowired
+	private MockMvc mockMvc;
+	
+	
+	public void testGetCLoudVendorDetails()
+	{
+		
+	}
+	
+	
+}

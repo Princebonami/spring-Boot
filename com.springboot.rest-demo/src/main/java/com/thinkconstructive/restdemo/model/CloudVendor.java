@@ -1,0 +1,84 @@
+package com.thinkconstructive.restdemo.model;
+
+import java.util.List;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+@Data
+@Entity
+@Table(name="cloudVendor")
+@NoArgsConstructor
+@AllArgsConstructor
+public class CloudVendor {
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer vendorId;
+	@NotNull 
+	private String vendorName;
+	private String vendorAddress;
+	private long vendorPhoneNmber;
+	
+//	public CloudVendor() {
+//		super();
+//	}
+//
+//	public CloudVendor(int vendorId, String vendorName, String vendorAddress, long vendorPhoneNmber) {
+//		super();
+//		this.vendorId = vendorId;
+//		this.vendorName = vendorName;
+//		this.vendorAddress = vendorAddress;
+//		this.vendorPhoneNmber = vendorPhoneNmber;
+//	}
+   
+//	public int getVendorId() {
+//		return vendorId;
+//	}
+//
+//	public void setVendorId(int vendorId) {
+//		this.vendorId = vendorId;
+//	}
+//
+//	public String getVendorName() {
+//		return vendorName;
+//	}
+//
+//	public void setVendorName(String vendorName) {
+//		this.vendorName = vendorName;
+//	}
+//
+//	public String getVendorAddress() {
+//		return vendorAddress;
+//	}
+//
+//	public void setVendorAddress(String vendorAddress) {
+//		this.vendorAddress = vendorAddress;
+//	}
+//
+//	public long getVendorPhoneNmber() {
+//		return vendorPhoneNmber;
+//	}
+//
+//	public void setVendorPhoneNmber(long vendorPhoneNmber) {
+//		this.vendorPhoneNmber = vendorPhoneNmber;
+//	}
+//
+//	@Override
+//	public String toString() {
+//		return "CloudVendor [vendorId=" + vendorId + ", vendorName=" + vendorName + ", vendorAddress=" + vendorAddress
+//				+ ", vendorPhoneNmber=" + vendorPhoneNmber + "]";
+//	}
+//	
+//	
+	
+	
+	
+
+}

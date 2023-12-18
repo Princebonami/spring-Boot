@@ -1,0 +1,30 @@
+package com.thinkconstructive.restdemo.service;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.thinkconstructive.restdemo.model.CloudVendor;
+import com.thinkconstructive.restdemo.service.CloudService;
+
+public class CloudServiceTest {
+ 
+	@Autowired
+	private CloudService cloudService;
+	
+	CloudVendor cloudVendor;
+	
+	@BeforeEach
+	void setup()
+	{
+		
+	}
+	
+	@AfterEach
+	void tearDown()
+	{
+		
+	}
+	
+	void 
+}

@@ -1,0 +1,114 @@
+package com.springboot.crud1.controller;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.Arrays;
+import java.util.List;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.springboot.crud1.Controller.StudentController;
+import com.springboot.crud1.Entity.Student;
+import com.springboot.crud1.Service.StudentService;
+
+
+@WebMvcTest(value = StudentController.class)     
+public class TestStudentController {
+	
+	@MockBean
+	private StudentService studentService;
+	
+	@InjectMocks
+	private StudentController studentController;
+	
+	@Autowired
+	private MockMvc mockMvc;  // it provides an interface which is used to simulate the http request i.e get post put delete request it is actually the mimic of Actual request it is only for testing purpose for the controller 
+
+	
+	
+	Student student1=new Student(1,"Prince",123,"prince14146@gmail.com");
+	Student student2=new Student(2,"Prince",124,"swati123@gmail.com");
+	
+	@Test
+	public void getAllStudentTest() throws Exception
+	{
+		List<Student> list=Arrays.asList(student1,student2);
+		when(studentService.getAllStudent()).thenReturn(list);
+		
+		MvcResult mvcResult= mockMvc.perform(MockMvcRequestBuilders.get("/students")).andExpect(status().isOk()).andReturn();
+		
+		// this is used to perform comparision of status.
+//	    Integer status=	mvcResult.getResponse().getStatus();
+//	    assertEquals(200,status);
+		
+		
+		// now try to perform the comparision of content.
+		
+		String actualContent=mvcResult.getResponse().getContentAsString();
+		ObjectMapper objectMapper=new ObjectMapper();
+		List<Student> list1= objectMapper.readValue(actualContent,new TypeReference<List<Student>>() {});
+		
+		assertEquals(list.size(), list1.size());
+		
+	    for(Integer i=0;i<list.size();i++)
+	    {
+	    	assertEquals(list.get(i).getStudentId(),list1.get(i).getStudentId());
+	    	assertEquals(list.get(i).getStudentName(),list1.get(i).getStudentName());
+	    	assertEquals(list.get(i).getStudentRollNo(),list1.get(i).getStudentRollNo());
+	    	assertEquals(list.get(i).getStudentEmail(),list1.get(i).getStudentEmail());
+	    }
+	    	
+	   
+	}
+	
+	@Test
+	public void getStudentByIdTest() throws Exception
+	{
+		Integer studentId=1;
+		when(studentService.getStudentById(studentId)).thenReturn(student1);
+		
+		MvcResult mvcResult= mockMvc.perform(MockMvcRequestBuilders.get("/students/{studentId}",studentId)).andExpect(status().isOk()).andReturn();
+		
+		// used to compare status 
+//		Integer status=  mvcResult.getResponse().getStatus();
+//	    assertEquals(200, status);
+		
+		// used to compare content
+		
+		String actContent= mvcResult.getResponse().getContentAsString();
+		
+		ObjectMapper objectMapper=new ObjectMapper();
+		Student student3= objectMapper.readValue(actContent,Student.class);
+		assertEquals(student1.getStudentId(),student3.getStudentId());
+		assertEquals(student1.getStudentName(),student3.getStudentName());
+		assertEquals(student1.getStudentRollNo(),student3.getStudentRollNo());
+		assertEquals(student1.getStudentEmail(),student3.getStudentEmail());
+		
+	}
+	
+	@Test
+	public void getByNameTest() throws Exception
+	{
+		String studentName="Prince";
+		List<Student> list=Arrays.asList(student1,student2);
+		when(studentService.getByName(studentName)).thenReturn(list);
+		
+		MvcResult mvcResult=mockMvc.perform(MockMvcRequestBuilders.get("/student/{studentName}",studentName)).andExpect(status().isOk()).andReturn();
+		Integer status=mvcResult.getResponse().getStatus();
+		assertEquals(200,status);
+	}
+	
+	
+}
